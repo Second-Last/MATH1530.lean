@@ -75,6 +75,27 @@ theorem th2 {G : Type*} [Group G] (H : Set G)
     (propext cond_is_same) ▸ (th1 H)
 
 
+theorem th3 {G : Type*} [Group G] [Fintype G] (H : Set G)
+  : IsSubgroup H ↔ (H.Nonempty ∧ (∀ (a b : G), a ∈ H → b ∈ H → (a * b) ∈ H)) :=
+
+  let bwd_direction :
+    (H.Nonempty ∧ (∀ (a b : G), a ∈ H → b∈H → (a * b) ∈ H)) → IsSubgroup H 
+    | ⟨⟨x, hx⟩, rel⟩ =>
+      /- let rec f (p : ℕ) : (x ^ (p + 1) ∈ H) := -/
+      /-   match p with -/
+      /-   | 0 => by simp; exact hx -/
+      /-   | p' + 1 =>  -/
+      /-     let x_p_in_h : x ^ (p' + 1) ∈ H := f p'  -/
+      /-     let xpp : x ^ (p' + 1) * x ∈ H := rel (x ^ (p' + 1)) x x_p_in_h hx -/
+      /-     Eq.subst (Eq.symm (pow_succ x (p' + 1))) xpp -/
+      let n : ℕ := Fintype.card G
+      let f (p : Fin (n + 1)) : G := x ^ (p.val + 1)
+
+      sorry
+
+  sorry
+
+
 end CH3
 
 end MATH1530
