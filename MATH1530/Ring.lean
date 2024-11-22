@@ -82,6 +82,25 @@ theorem inverse_is_unique {α : Type} [Ring α] (a b c : α)
       · apply Eq.trans ab 
         exact Eq.symm ac
 
+/-- This corresponds to Theorem 1 of Chapter 12.
+
+Let R be a ring with unity, then Rˣ = {a ∈ R | a is a unit} is a group with
+respect to · (* in Lean).
+
+This proof looks too easy to be true, but it makes sense when you think about
+it. The four requirements of a group are:
+1. Closed. (by R is a ring)
+2. · is assoc. (by R is a ring)
+3. 1 (identity) exists. (by R is  ring)
+4. (Multiplicative) inverse exists.
+
+Only 4 we need to prove by ourselves, 1~3 are all provided by R is a ring. Then,
+the proof of 4 is also trivial because that's the definition of a unit!
+
+Lean is quite smart in this case! (o^▽^o)
+-/
+instance [Ring α] : Group (Units α) where
+  inv_mul_cancel := inv_mul_cancel
 
 end Ring
 
