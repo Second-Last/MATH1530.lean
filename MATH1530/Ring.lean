@@ -102,6 +102,43 @@ Lean is quite smart in this case! (o^▽^o)
 instance [Ring α] : Group (Units α) where
   inv_mul_cancel := inv_mul_cancel
 
+def twostep_nonunitalsubring {α : Type} [NonUnitalRing α]
+  (s : Set α)
+  (s_not_empty : s.Nonempty)
+  (sub_mem : ∀ a ∈ s, ∀ b ∈ s, a - b ∈ s)
+  (mul_mem : ∀ a ∈ s, ∀ b ∈ s, a * b ∈ s) : NonUnitalSubring α := 
+    let zero_mem'' : 0 ∈ s := by
+        obtain ⟨x, hx⟩ := s_not_empty
+        have x_sub_x_is_0 : x - x = 0 := by exact sub_eq_zero_of_eq rfl
+        rw [←x_sub_x_is_0]
+        exact sub_mem x hx x hx
+
+    let neg_mem'' : ∀x ∈ s, (-x) ∈ s := by 
+        intro a a_in_s
+        rw [←zero_sub a]
+        exact sub_mem 0 zero_mem'' a a_in_s
+
+
+    {
+      carrier := s 
+
+      zero_mem' := zero_mem''
+
+      mul_mem' := by 
+        intro a b a_in_s b_in_s
+        exact mul_mem a a_in_s b b_in_s
+
+      add_mem' := by
+        intro a b a_in_s b_in_s
+        rw [←neg_neg b, ←sub_eq_add_neg a (-b)]
+        have neg_b_in_s : (-b) ∈ s := neg_mem'' b b_in_s
+        exact sub_mem a a_in_s (-b) neg_b_in_s
+
+      neg_mem' := by 
+        intro a a_in_s
+        exact neg_mem'' a a_in_s
+    }
+
 end Ring
 
 end MATH1530
